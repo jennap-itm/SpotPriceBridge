@@ -1,50 +1,34 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
+using SpotPriceBridge.Data;
 using SpotPriceBridge.Models;
-using System.Data;
+using System.Linq;
 
-[ApiController]
-[Route("api/[controller]")]
-public class SpotPriceController : ControllerBase
+namespace SpotPriceBridge.Controllers
 {
-    private readonly IConfiguration _config;
-
-    public SpotPriceController(IConfiguration config)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SpotPriceController : ControllerBase
     {
-        _config = config;
-    }
+        private readonly ApplicationDbContext _context;
 
-    // Root endpoint for the API (handles '/')
-    [HttpGet("/")]
-    public IActionResult GetRootAndSpotPrices()
-    {
-        var spotPrices = new List<SpotPriceModel>();
-
-        // Fetching spot prices from the database
-        using (var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
+        public SpotPriceController(ApplicationDbContext context)
         {
-            conn.Open();
-            var cmd = new SqlCommand("SELECT Code, AskPrice FROM NewSpotPrice", conn);
-
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                spotPrices.Add(new SpotPriceModel
-                {
-                    Code = reader.GetString(reader.GetOrdinal("Code")),
-                    AskPrice = reader.GetDecimal(reader.GetOrdinal("AskPrice")),
-                });
-            }
+            _context = context;
         }
 
-        // Create a response object that contains both the welcome message and the spot prices
-        var response = new
+        // Root endpoint for the API (handles '/')
+        [HttpGet("/")]
+        public IActionResult GetRootAndSpotPrices()
         {
-            Message = "Welcome to the Spot Price API!",
-            SpotPrices = spotPrices
-        };
+            var spotPrices = _context.SpotPrice.ToList();
 
-        return Ok(response);
+            var response = new
+            {
+                Message = "Welcome to the Spot Price API!",
+                SpotPrices = spotPrices
+            };
+
+            return Ok(response);
+        }
     }
 }
