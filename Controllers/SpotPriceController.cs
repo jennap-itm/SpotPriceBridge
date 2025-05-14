@@ -15,6 +15,14 @@ public class SpotPriceController : ControllerBase
         _config = config;
     }
 
+    // Root endpoint for the API
+    [HttpGet("/")]
+    public IActionResult GetRoot()
+    {
+        return Ok("Welcome to the Spot Price API!");
+    }
+
+    // Get the latest spot prices
     [HttpGet]
     public IActionResult GetLatestSpotPrices()
     {
@@ -30,13 +38,12 @@ public class SpotPriceController : ControllerBase
             {
                 spotPrices.Add(new SpotPriceModel
                 {
-                    Code = reader.GetString(reader.GetOrdinal("Code")),  // Extract 'Code' column
-                    AskPrice = reader.GetDecimal(reader.GetOrdinal("AskPrice")),  // Extract 'AskPrice' column
+                    Code = reader.GetString(reader.GetOrdinal("Code")),
+                    AskPrice = reader.GetDecimal(reader.GetOrdinal("AskPrice")),
                 });
             }
         }
 
-        // Return the entire list of spot prices
         return Ok(spotPrices);
     }
 }
