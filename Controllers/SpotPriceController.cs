@@ -15,19 +15,13 @@ public class SpotPriceController : ControllerBase
         _config = config;
     }
 
-    // Root endpoint for the API
+    // Root endpoint for the API (handles '/')
     [HttpGet("/")]
-    public IActionResult GetRoot()
-    {
-        return Ok("Welcome to the Spot Price API!");
-    }
-
-    // Get the latest spot prices
-    [HttpGet]
-    public IActionResult GetLatestSpotPrices()
+    public IActionResult GetRootAndSpotPrices()
     {
         var spotPrices = new List<SpotPriceModel>();
 
+        // Fetching spot prices from the database
         using (var conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
         {
             conn.Open();
@@ -44,6 +38,13 @@ public class SpotPriceController : ControllerBase
             }
         }
 
-        return Ok(spotPrices);
+        // Create a response object that contains both the welcome message and the spot prices
+        var response = new
+        {
+            Message = "Welcome to the Spot Price API!",
+            SpotPrices = spotPrices
+        };
+
+        return Ok(response);
     }
 }
