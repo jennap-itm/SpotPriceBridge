@@ -1,0 +1,6 @@
+@SpotPriceBridge_HostAddress = http://localhost:5208
+
+GET {{SpotPriceBridge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
