@@ -14,10 +14,12 @@ namespace SpotPriceBridge.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<SpotPriceModel>()
-                .ToTable("NewSpotPrice");
+                .Property(p => p.AskPrice)
+                .HasColumnType("decimal(18,4)"); 
+
+            base.OnModelCreating(modelBuilder);
         }
+
     }
 }
