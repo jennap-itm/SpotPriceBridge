@@ -17,7 +17,7 @@ namespace SpotPriceBridge.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<SpotPriceModel>()
-                .ToTable("SpotPrice");
+                .ToTable("NewSpotPrice");
         }
     }
 }
