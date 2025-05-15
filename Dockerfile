@@ -2,14 +2,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy everything and publish the release version
+# Copy project file and restore as distinct layers
 COPY ["SpotPriceBridge.csproj", "./"]
+
+# Copy all folders used by the app
 COPY ["Controllers/", "Controllers/"]
 COPY ["Models/", "Models/"]
-COPY ["Program.cs", "./"]
+COPY ["Data/", "Data/"]         
 COPY ["Properties/", "Properties/"]
-# Add any other necessary folders/files here — exclude bin/, obj/, publish/, etc.
 
+# Copy the main program file
+COPY ["Program.cs", "./"]
+
+# Restore and publish
+RUN dotnet restore
 RUN dotnet publish -c Release -o /out
 
 # Runtime stage
