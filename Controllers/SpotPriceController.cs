@@ -20,7 +20,7 @@ namespace SpotPriceBridge.Controllers
         [HttpGet("/")]
         public IActionResult GetRootAndSpotPrices()
         {
-            var spotPrices = _context.SpotPrice.ToList();
+            var spotPrices = _context.NewSpotPrice.ToList();
 
             var response = new
             {

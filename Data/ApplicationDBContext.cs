@@ -10,10 +10,12 @@ namespace SpotPriceBridge.Data
         {
         }
 
-        public DbSet<SpotPriceModel> SpotPrice { get; set; }
+        public DbSet<SpotPriceModel> NewSpotPrice { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<SpotPriceModel>().ToTable("NewSpotPrice");
+
             modelBuilder.Entity<SpotPriceModel>()
                 .Property(p => p.AskPrice)
                 .HasColumnType("decimal(18,4)"); 
