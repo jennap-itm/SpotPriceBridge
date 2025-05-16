@@ -6,7 +6,8 @@ namespace SpotPriceBridge.Models
     {
         [Key]
         public int Id { get; set; }
-        public required string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
         public decimal AskPrice { get; set; }
+        public DateTime UpdatedOnUtc { get; set; }
     }
 }
